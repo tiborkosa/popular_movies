@@ -34,7 +34,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     public MoviesListAdapter(List<Movie> movies, ListItemClickListener mOnClickListener) {
         this.movies = movies;
-        this.mNumberItems = movies.size();
+        int size = 0;
+        if(movies != null) size = movies.size();
+        this.mNumberItems = size;
         this.mOnClickListener = mOnClickListener;
     }
 
@@ -97,5 +99,5 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         }
     }
 
-    
+
 }

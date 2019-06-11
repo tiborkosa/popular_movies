@@ -32,7 +32,7 @@ public class jsonUtil {
      * @exception JSONException this is logged and the value will be null
      */
     public static List<Movie> parseMovies(String jsonString){
-        Log.v(TAG, jsonString);
+        Log.d(TAG, "jsonString: "+jsonString);
         List<Movie> movies = new ArrayList<>();
 
         if(jsonString == null || jsonString.equals("")) return null;

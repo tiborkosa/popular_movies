@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.popularmovies.models.Movie;
@@ -21,10 +24,50 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Context ctx = MainActivity.this;
-    private List<Movie> movies;
+    private final Context ctx = MainActivity.this;
+    private static List<Movie> movies;
+
+    // optimization to not get data from server if already loaded
+    private static char sortedBy = 'P';
     RecyclerView rv;
     MoviesListAdapter adapter;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        /*
+            How to check if async task already running and cancel it?
+            In case of multiple menu clicks
+         */
+        switch (item.getItemId()){
+            case R.id.sort_popular:
+                if(sortedBy != 'P' || movies == null) {
+                    sortedBy = 'P';
+                    new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.POPULAR, ctx));
+                } else {
+                    Toast.makeText(ctx, "List is already sorted by popularity!", Toast.LENGTH_LONG).show();
+                }
+                break;
+            case R.id.sort_rating:
+                if(sortedBy != 'R' || movies == null) {
+                    sortedBy = 'R';
+                    new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.TOP_RATED, ctx));
+                }else {
+                    Toast.makeText(ctx, "List is already sorted by rating!", Toast.LENGTH_LONG).show();
+                }
+                break;
+            default:break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
