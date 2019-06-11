@@ -3,7 +3,7 @@ package com.example.popularmovies.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Movie {//implements Parcelable {
+public class Movie implements Parcelable {
 
     private int id;
     private String poster;
@@ -92,22 +92,21 @@ public class Movie {//implements Parcelable {
                 '}';
     }
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeInt(id);
-//        dest.writeString(poster);
-//        dest.writeString(title);
-//        dest.writeString(plot);
-//        dest.writeString(rating);
-//        dest.writeString(release_date);
-//    }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+ @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(poster);
+        dest.writeString(title);
+        dest.writeString(plot);
+        dest.writeString(rating);
+        dest.writeString(release_date);
+    }
 
-    public final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    public final static Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
         @Override
         public Movie createFromParcel(Parcel source) {

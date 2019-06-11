@@ -1,7 +1,9 @@
 package com.example.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.popularmovies.adapters.MoviesListAdapter;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.utils.NetworkUtil;
 import com.example.popularmovies.utils.jsonUtil;
@@ -23,6 +26,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements MoviesListAdapter.ListItemClickListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    public static final String MOVIE_DATA = "movie_data";
 
     private final Context ctx = MainActivity.this;
     private static List<Movie> movies;
@@ -82,7 +87,9 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
     @Override
     public void onListItemClick(int clickedItemIndex) {
         Toast.makeText(ctx, clickedItemIndex +" 23", Toast.LENGTH_LONG).show();
-        //TODO needs to be implemented
+        Intent intent = new Intent(ctx, MovieActivity.class);
+        intent.putExtra(MOVIE_DATA, movies.get(clickedItemIndex));
+        startActivity(intent);
     }
 
     public class MovieDataTask extends AsyncTask<URL, Void, String>{
