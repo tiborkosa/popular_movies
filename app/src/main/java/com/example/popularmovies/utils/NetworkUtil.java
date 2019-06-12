@@ -33,9 +33,8 @@ public class NetworkUtil {
      */
     public static URL buildUrl(String path, Context ctx) {
         Uri uri = getUri(path, ctx);
-        URL url = getURL(uri);
 
-        return url;
+        return getURL(uri);
     }
 
     /**
@@ -46,9 +45,8 @@ public class NetworkUtil {
     public static URL buildImagePath(String imageName) {
 
         Uri uri = getImageUri(imageName, -1);
-        URL url = getURL(uri);
 
-        return url;
+        return getURL(uri);
     }
 
     /**
@@ -59,9 +57,8 @@ public class NetworkUtil {
      */
     public static URL buildImagePath(String imageName, int index) {
         Uri uri = getImageUri(imageName, index);
-        URL url = getURL(uri);
 
-        return url;
+        return getURL(uri);
     }
 
     /**

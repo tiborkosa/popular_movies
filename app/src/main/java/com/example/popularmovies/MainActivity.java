@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
     // optimization to not get data from server if already loaded
     private static char sortedBy = 'P';
 
-    RecyclerView rv;
-    MoviesListAdapter adapter;
-    ProgressBar mLoader;
-    TextView mError;
+    private RecyclerView rv;
+    private MoviesListAdapter adapter;
+    private ProgressBar mLoader;
+    private TextView mError;
 
     /**
      * Creating the main activity
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
     /**
      * Asynchronous task to pull data from the server
      */
-    public class MovieDataTask extends AsyncTask<URL, Void, String>{
+    private class MovieDataTask extends AsyncTask<URL, Void, String>{
 
         /**
          * Async background task

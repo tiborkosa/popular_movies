@@ -65,7 +65,7 @@ public class jsonUtil {
      * Only the id field is int and others are string since we don't need to manipulate them.
      * I might update it if needed.
      *
-     * @param jsonObject
+     * @param jsonObject json movie
      * @return newly created movie object
      */
     public static Movie parseMovie(JSONObject jsonObject) {

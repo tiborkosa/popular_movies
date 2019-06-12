@@ -21,9 +21,9 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
     private final static String TAG = MoviesListAdapter.class.getSimpleName();
 
-    private List<Movie> movies;
-    private int mNumberItems;
-    final private ListItemClickListener mOnClickListener;
+    private final List<Movie> movies;
+    private final int mNumberItems;
+    private final ListItemClickListener mOnClickListener;
 
     /**
      * List item clicked listener interface
@@ -85,7 +85,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
      * The view holder for the recycle view
      */
     class MoviesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        ImageView img;
+        private final ImageView img;
 
         /**
          * Movies holder class for the recycle view
