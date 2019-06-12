@@ -12,8 +12,11 @@ public class Movie implements Parcelable {
     private String rating;
     private String release_date;    // storing it in string since we are not manipulating the data
 
-    public Movie(){}
+    // empty constructor
+    public Movie() {
+    }
 
+    // main constructor
     public Movie(int id, String poster, String title, String plot, String rating, String release_date) {
         this.id = id;
         this.poster = poster;
@@ -23,7 +26,8 @@ public class Movie implements Parcelable {
         this.release_date = release_date;
     }
 
-    private Movie(Parcel in){
+    // parcelable constructor
+    private Movie(Parcel in) {
         id = in.readInt();
         poster = in.readString();
         title = in.readString();
@@ -80,6 +84,7 @@ public class Movie implements Parcelable {
         this.release_date = release_date;
     }
 
+    // tostring gor debugging
     @Override
     public String toString() {
         return "Movie{" +
@@ -92,11 +97,14 @@ public class Movie implements Parcelable {
                 '}';
     }
 
+    // not used describe contents
     @Override
     public int describeContents() {
         return 0;
     }
- @Override
+
+    // write parcelable
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(poster);
@@ -106,7 +114,8 @@ public class Movie implements Parcelable {
         dest.writeString(release_date);
     }
 
-    public final static Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+    // parcelable creator class
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
 
         @Override
         public Movie createFromParcel(Parcel source) {

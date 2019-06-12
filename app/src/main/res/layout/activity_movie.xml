@@ -5,46 +5,82 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MovieActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:paddingBottom="24dp"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_movie_image"
             android:layout_width="match_parent"
-            android:contentDescription="Movie poster"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
+            android:layout_height="400dp"
+            android:contentDescription="@string/image_poster_desc"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:background="@drawable/border"
-            />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="16dp"/>
         <TextView
             android:id="@+id/tv_movie_plot_label"
-            android:text="Plot"
-            android:layout_width="match_parent"
+            android:text="@string/plot_label"
+            android:layout_below="@+id/iv_movie_image"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv_movie_plot_text"
-            android:layout_width="match_parent"
+            android:layout_toRightOf="@+id/tv_movie_plot_label"
+            android:layout_toEndOf="@+id/tv_movie_plot_label"
+            android:layout_below="@+id/iv_movie_image"
+            android:layout_marginLeft="8dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv-user_rating_label"
-            android:text="Rating:"
+            android:layout_below="@+id/tv_movie_plot_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/rating_label"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv-user_rating_text"
+            android:layout_below="@+id/tv_movie_plot_text"
+            android:layout_toRightOf="@id/tv-user_rating_label"
+            android:layout_toEndOf="@id/tv-user_rating_label"
+            android:maxLines="1"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv-release_date_label"
-            android:text="Release Date:"
+            android:layout_below="@+id/tv-user_rating_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/release_date_label"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv-release_date_text"
+            android:layout_below="@+id/tv-user_rating_text"
+            android:layout_toRightOf="@id/tv-release_date_label"
+            android:layout_toEndOf="@id/tv-release_date_label"
+            android:maxLines="1"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </RelativeLayout>
 </ScrollView>

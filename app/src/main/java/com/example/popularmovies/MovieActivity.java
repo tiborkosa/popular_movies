@@ -23,11 +23,17 @@ public class MovieActivity extends AppCompatActivity {
     private static TextView mMovieReleaseDate;
     private static TextView mMovieRating;
 
+    /**
+     * On create method will get the data from the main activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+        // getting the back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mMovieImage = findViewById(R.id.iv_movie_image);
         mMoviePlot = findViewById(R.id.tv_movie_plot_text);
         mMovieReleaseDate = findViewById(R.id.tv_release_date_text);
@@ -37,12 +43,24 @@ public class MovieActivity extends AppCompatActivity {
 
         Movie movie = intent.getParcelableExtra(MOVIE_DATA);
 
+        // error handling maybe?
         Log.d(TAG, movie.toString());
 
+        setTitle(movie.getTitle());
         Picasso.get().load(NetworkUtil.buildImagePath(movie.getPoster()).toString()).into(mMovieImage);
         mMoviePlot.setText(movie.getPlot());
         mMovieRating.setText(movie.getRating());
         mMovieReleaseDate.setText(movie.getRelease_date());
 
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 }
