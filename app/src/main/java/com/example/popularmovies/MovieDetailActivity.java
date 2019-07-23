@@ -57,6 +57,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
 
     private static final String ACTIVITY_TITLE = "MovieDetail";
 
+    /**
+     * Saving instance state
+     * @param outState
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(TRAILERS, (ArrayList<? extends Parcelable >) trailers);
@@ -67,6 +71,7 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
 
     /**
      * On create method will get the data from the main activity
+     * Also will check if the trailers are saved in the state otherwise get it from the web
      * @param savedInstanceState
      */
     @Override
@@ -129,8 +134,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
         // update the favorite star button color
         checkRated();
 
+        /**
+         * Rating button listener
+         * This will either save or delete the current movie from our DB
+         */
         mRatingButton.setOnClickListener(view -> {
-            Log.d(TAG, "onClick favorite: " + movie.getRated());
             if(movie.getRated()){
                 //delete
                 AppExecutors.getInstance().diskIO().execute(() -> {
@@ -143,7 +151,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
                 // insert new
                 AppExecutors.getInstance().diskIO().execute(() -> {
                     db.myRatedMoviesDao().insertMovie(movie);
-                    mRatingButton.setColorFilter(getResources().getColor(R.color.favorite_button));
+                    // updating the star color using UI thread to avoid crash
+                    // NOTE: how do you test this? it did not crash while running emulator
+                    runOnUiThread( () -> mRatingButton.setColorFilter(getResources().getColor(R.color.favorite_button)));
+
                     movie.setRated(true);
                 });
                 Log.d(TAG, "onClick favorite saved");
@@ -157,6 +168,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
         checkRated();
     }
 
+    /**
+     * checking if movie is in our local DB and update the rating button color accordingly
+     */
     private void checkRated() {
         if(movie.getRated()) {
             Log.d(TAG, "get rated executed!");
@@ -174,6 +188,11 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
         return true;
     }
 
+    /**
+     * Trailer list item click listener
+     * This will either play the trailer in the native YouTube app or the browser
+     * @param clickedItemIndex
+     */
     @Override
     public void onListeItemClick(int clickedItemIndex) {
         String key = trailers.get(clickedItemIndex).getKey();
@@ -188,6 +207,10 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
         }
     }
 
+    /**
+     * Lunching the ReviewActivity to read the reviews of the movie
+     * @param view
+     */
     public void readReviewClicked(View view){
         if(view.getId() == R.id.btn_read_reviews){
 
@@ -197,6 +220,9 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
         }
     }
 
+    /**
+     * TrailerDataTask is used to reach out the web for the list of trailers
+     */
     public class TrailerDataTask extends AsyncTask<URL, Void, String>{
 
         @Override
@@ -235,16 +261,25 @@ public class MovieDetailActivity extends AppCompatActivity implements MovieTrail
             }
         }
 
+        /**
+         * Show spinner on load start
+         */
         private void onStartLoad(){
             mSpinner.setVisibility(View.VISIBLE);
         }
 
+        /**
+         * Show error message on error from the server
+         */
         private void onError(){
             mSpinner.setVisibility(View.GONE);
             rv.setVisibility(View.GONE);
             mError.setVisibility(View.VISIBLE);
         }
 
+        /**
+         * Show the RecycleView and hide the error and spinner
+         */
         private void onSuccess(){
             rv.setVisibility(View.VISIBLE);
             mError.setVisibility(View.GONE);

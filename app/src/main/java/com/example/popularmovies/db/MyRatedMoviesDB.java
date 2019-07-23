@@ -8,6 +8,9 @@ import android.util.Log;
 
 import com.example.popularmovies.models.Movie;
 
+/**
+ * Movie database creation using Room
+ */
 @Database(entities = { Movie.class}, version = 1, exportSchema = false)
 public abstract class MyRatedMoviesDB extends RoomDatabase {
 
@@ -17,6 +20,11 @@ public abstract class MyRatedMoviesDB extends RoomDatabase {
     private static final String DATABASE_NAME = "myRatedMovies";
     private static MyRatedMoviesDB sInstance;
 
+    /**
+     * Get single instance of the database
+     * @param context of the application
+     * @return the single instance that was created
+     */
     public static MyRatedMoviesDB getInstance(Context context){
         if(sInstance == null){
             synchronized (LOCK){
@@ -30,5 +38,9 @@ public abstract class MyRatedMoviesDB extends RoomDatabase {
         return sInstance;
     }
 
+    /**
+     * Abstract method of the database DAO
+     * @return
+     */
     public abstract MyRatedMoviesDao myRatedMoviesDao();
 }
