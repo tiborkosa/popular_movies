@@ -19,9 +19,11 @@ public class NetworkUtil {
     private static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     private static final String API_KEY_STRING = "api_key";
     private static final String[] IMAGE_SIZES = {"w92", "w154", "w185", "w342", "w500", "w780", "original"};
-    public static final String POPULAR = "movie/popular";
-    public static final String TOP_RATED = "movie/top_rated";
-
+    public static final String POPULAR_PATH = "popular";
+    public static final String TOP_RATED_PATH = "top_rated";
+    private static final String MOVIE_PATH = "movie";
+    public static final String TRAILER_PATH = "videos";
+    public static final String REVIEW_PATH = "reviews";
 
     /**
      * This method is used to build the url for getting the main data
@@ -33,6 +35,13 @@ public class NetworkUtil {
      */
     public static URL buildUrl(String path, Context ctx) {
         Uri uri = getUri(path, ctx);
+
+        return getURL(uri);
+    }
+
+    public static URL buildUrl(String movieId, String path, Context ctx){
+
+        Uri uri = getUri(movieId, path, ctx);
 
         return getURL(uri);
     }
@@ -73,6 +82,25 @@ public class NetworkUtil {
         return Uri
                 .parse(BASE_URL)
                 .buildUpon()
+                .appendEncodedPath(MOVIE_PATH)
+                .appendEncodedPath(path)
+                .appendQueryParameter(API_KEY_STRING, getAPIKey(ctx))
+                .build();
+    }
+
+    /**
+     * Building uri to get json data for the trailer and reviews
+     *
+     * @param movieId the movie id that we want to get the data for
+     * @param path either the @TRAILER_PATH or the @REVIEW_PATH
+     * @param ctx
+     * @return Uri to build the URL
+     */
+    private static Uri getUri(String movieId, String path, Context ctx) {
+        return Uri.parse(BASE_URL)
+                .buildUpon()
+                .appendEncodedPath(MOVIE_PATH)
+                .appendEncodedPath(movieId)
                 .appendEncodedPath(path)
                 .appendQueryParameter(API_KEY_STRING, getAPIKey(ctx))
                 .build();

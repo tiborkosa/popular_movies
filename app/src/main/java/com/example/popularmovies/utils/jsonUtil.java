@@ -3,6 +3,8 @@ package com.example.popularmovies.utils;
 import android.util.Log;
 
 import com.example.popularmovies.models.Movie;
+import com.example.popularmovies.models.MovieReview;
+import com.example.popularmovies.models.MovieTrailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,13 +17,22 @@ public class jsonUtil {
 
     private static final String TAG = jsonUtil.class.getSimpleName();
 
-    public static final String ID = "id";
-    public static final String POSTER = "poster_path";
-    public static final String TITLE = "title";
-    public static final String PLOT = "overview";
-    public static final String RATING = "vote_average";
-    public static final String RELEASE_DATE = "release_date";
+    private static final String ID = "id";
+    private static final String POSTER = "poster_path";
+    private static final String TITLE = "title";
+    private static final String PLOT = "overview";
+    private static final String RATING = "vote_average";
+    private static final String RELEASE_DATE = "release_date";
     private static final String RESULTS = "results";
+
+    // trailers
+    private static final String TRAILER_KEY = "key";
+    private static final String TRAILER_NAME = "name";
+    private static final String TRAILER_TYPE = "type";
+
+    // review
+    private static final String REVIEW_AUTHOR = "author";
+    private static final String REVIEW_CONTENT = "content";
 
     /**
      * Converting the result of the API call to a list of movies
@@ -45,7 +56,7 @@ public class jsonUtil {
             JSONArray jsonArray = json.optJSONArray(RESULTS);
 
             for ( int i =0; i < jsonArray.length(); i++) {
-                Movie movie = parseMovie(jsonArray.optJSONObject(i));
+                Movie movie = createMovieObject(jsonArray.optJSONObject(i));
 
                 if(movie != null) movies.add(movie);
             }
@@ -54,7 +65,6 @@ public class jsonUtil {
             Log.v(TAG, "Unable to parse json array");
             e.printStackTrace();
         }
-
 
         return movies;
     }
@@ -68,7 +78,7 @@ public class jsonUtil {
      * @param jsonObject json movie
      * @return newly created movie object
      */
-    public static Movie parseMovie(JSONObject jsonObject) {
+    public static Movie createMovieObject(JSONObject jsonObject) {
 
         int id = jsonObject.optInt(ID);
         String poster = jsonObject.optString(POSTER);
@@ -80,4 +90,75 @@ public class jsonUtil {
         return new Movie(id, poster, title, plot, rating, release_date);
     }
 
+    public static List<MovieTrailer> pareseTrailers(String jsonString){
+        Log.d(TAG, "jsonString: "+jsonString);
+        List<MovieTrailer> trailers = new ArrayList<>();
+
+        if(jsonString == null || jsonString.equals("")) return null;
+
+        try {
+            JSONObject json = new JSONObject(jsonString);
+
+            if(json == null) return null;
+
+            JSONArray jsonArray = json.optJSONArray(RESULTS);
+
+            for ( int i =0; i < jsonArray.length(); i++) {
+                MovieTrailer trailer = createTrailerObject(jsonArray.optJSONObject(i));
+
+                if(trailer != null) trailers.add(trailer);
+            }
+
+        } catch (JSONException e) {
+            Log.v(TAG, "Unable to parse json array");
+            e.printStackTrace();
+        }
+
+
+        return trailers;
+    }
+
+    private static MovieTrailer createTrailerObject(JSONObject jsonObject){
+        int id = jsonObject.optInt(ID);
+        String name = jsonObject.optString(TRAILER_NAME);
+        String key = jsonObject.optString(TRAILER_KEY);
+        String type = jsonObject.optString(TRAILER_TYPE);
+
+        return  new MovieTrailer(id, name, key, type);
+    }
+
+    public static List<MovieReview> pareseReviews(String jsonString){
+        Log.d(TAG, "jsonString: "+jsonString);
+        List<MovieReview> reviews = new ArrayList<>();
+
+        if(jsonString == null || jsonString.equals("")) return null;
+
+        try {
+            JSONObject json = new JSONObject(jsonString);
+
+            if(json == null) return null;
+
+            JSONArray jsonArray = json.optJSONArray(RESULTS);
+
+            for ( int i =0; i < jsonArray.length(); i++) {
+                MovieReview review = createReviewObject(jsonArray.optJSONObject(i));
+
+                if(review != null) reviews.add(review);
+            }
+
+        } catch (JSONException e) {
+            Log.v(TAG, "Unable to parse json array");
+            e.printStackTrace();
+        }
+
+
+        return reviews;
+    }
+
+    private static MovieReview createReviewObject(JSONObject jsonObject){
+        String author = jsonObject.optString(REVIEW_AUTHOR);
+        String content = jsonObject.optString(REVIEW_CONTENT);
+
+        return  new MovieReview(author, content);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.popularmovies;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.popularmovies.adapters.MoviesListAdapter;
+import com.example.popularmovies.db.MyRatedMoviesDB;
 import com.example.popularmovies.models.Movie;
 import com.example.popularmovies.utils.NetworkUtil;
 import com.example.popularmovies.utils.jsonUtil;
@@ -44,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
     private MoviesListAdapter adapter;
     private ProgressBar mLoader;
     private TextView mError;
+    private TextView mNoFavorites;
 
+    //private MyRatedMoviesDB db;
     /**
      * Creating the main activity
      * We will load the saved state if exists or load the new data
@@ -55,12 +59,15 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        MyRatedMoviesDB db = MyRatedMoviesDB.getInstance(getApplication());
+
         rv = findViewById(R.id.rv_main);
         mLoader = findViewById(R.id.pb_main);
         mError = findViewById(R.id.tv_error_main);
+        mNoFavorites = findViewById(R.id.tv_no_favorites);
 
         if(savedInstanceState == null || !savedInstanceState.containsKey("movies")) {
-            new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.POPULAR, ctx));
+            new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.POPULAR_PATH, ctx));
             Log.d(TAG, "Getting the data from web");
         }
         else {
@@ -102,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
             case R.id.sort_popular:
                 if(sortedBy != 'P' || movies == null) {
                     sortedBy = 'P';
-                    new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.POPULAR, ctx));
+                    new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.POPULAR_PATH, ctx));
+                    setTitle("Popular Movies");
                 } else {
                     Toast.makeText(ctx, "List is already sorted by popularity!", Toast.LENGTH_LONG).show();
                 }
@@ -110,11 +118,34 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
             case R.id.sort_rating:
                 if(sortedBy != 'R' || movies == null) {
                     sortedBy = 'R';
-                    new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.TOP_RATED, ctx));
+                    new MovieDataTask().execute(NetworkUtil.buildUrl( NetworkUtil.TOP_RATED_PATH, ctx));
+                    setTitle("Rated Movies");
                 }else {
                     Toast.makeText(ctx, "List is already sorted by rating!", Toast.LENGTH_LONG).show();
                 }
                 return true;
+            case R.id.menu_favorites:
+                sortedBy = 'F';
+                setTitle("My Favorite Movies");
+                MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+                viewModel.getMovies().observe(this, (fMovies) -> {
+                        if(sortedBy == 'F'){
+                            Log.d(TAG, "Updating list of movies from LiveData in ViewModel.");
+                            movies = fMovies;
+                            adapter = new MoviesListAdapter(fMovies, MainActivity.this);
+                            rv.setAdapter(adapter);
+                            rv.setLayoutManager(new GridLayoutManager(MainActivity.this, numberOfColumns()));
+                            if(movies.size() > 0){
+                                mNoFavorites.setVisibility(View.GONE);
+                            } else {
+                                // show no favorites
+                                mNoFavorites.setVisibility(View.VISIBLE);
+                            }
+
+                        }
+                    }
+                );
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -139,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
      */
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        Intent intent = new Intent(ctx, MovieActivity.class);
+        Intent intent = new Intent(ctx, MovieDetailActivity.class);
         intent.putExtra(MOVIE_DATA, movies.get(clickedItemIndex));
         startActivity(intent);
     }
@@ -147,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements MoviesListAdapter
     /**
      * Asynchronous task to pull data from the server
      */
-    private class MovieDataTask extends AsyncTask<URL, Void, String>{
+    public class MovieDataTask extends AsyncTask<URL, Void, String>{
 
         /**
          * Async background task

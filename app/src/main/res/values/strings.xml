@@ -2,11 +2,16 @@
     <string name="app_name">Popular Movies</string>
     <string name="popularity">Popularity</string>
     <string name="rating">Rating</string>
-    <string name="sort_by">Sort By</string>
     <string name="image_poster_desc">Image poster</string>
-    <string name="rating_label">Rating:</string>
-    <string name="release_date_label">Release Date:</string>
-    <string name="plot_label">Plot</string>
     <string name="error_main">Could not load data!</string>
+    <string name="trailer_img_poster">Trailer image poster</string>
+    <string name="error_trailer">Could not load trailers!</string>
+    <string name="review_error">Could not load rewievs!</string>
+    <string name="rating_button">Rating button</string>
+    <string name="trailers_label">Trailers:</string>
+    <string name="read_reviews_btn_text">Read reviews</string>
+    <string name="favorites_menu">Favorites</string>
+    <string name="no_favorites">You do not have favorite movies yet</string>
+    <string name="tv_review_author">Reviewer:</string>
 
 </resources>

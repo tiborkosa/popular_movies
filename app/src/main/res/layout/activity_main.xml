@@ -31,5 +31,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/error_main"/>
+    <TextView
+        android:id="@+id/tv_no_favorites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/no_favorites"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

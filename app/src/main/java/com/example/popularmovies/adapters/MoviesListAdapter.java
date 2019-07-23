@@ -91,7 +91,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
          * Movies holder class for the recycle view
          * @param itemView that will be shown
          */
-        public MoviesHolder(@NonNull View itemView) {
+        private MoviesHolder(@NonNull View itemView) {
             super(itemView);
 
             img = itemView.findViewById(R.id.iv_movie_list_item);
@@ -103,7 +103,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
          * Using picasso for image cashing and loading
          * @param movie object to show
          */
-        public void bind(Movie movie) {
+        private void bind(Movie movie) {
             URL imgPath = NetworkUtil.buildImagePath(movie.getPoster());
             Log.v(TAG, "img: " + imgPath.toString());
             Picasso

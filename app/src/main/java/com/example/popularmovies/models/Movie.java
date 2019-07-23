@@ -1,18 +1,25 @@
 package com.example.popularmovies.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@Entity(tableName = "movies")
 public class Movie implements Parcelable {
 
+    @PrimaryKey(autoGenerate = false)
     private int id;
     private String poster;
     private String title;
     private String plot;
     private String rating;
-    private String release_date;    // storing it in string since we are not manipulating the data
+    private String release_date;
+    private Boolean isRated = false;
 
     // empty constructor
+    @Ignore
     public Movie() {
     }
 
@@ -27,6 +34,7 @@ public class Movie implements Parcelable {
     }
 
     // parcelable constructor
+    @Ignore
     private Movie(Parcel in) {
         id = in.readInt();
         poster = in.readString();
@@ -82,6 +90,14 @@ public class Movie implements Parcelable {
 
     public void setRelease_date(String release_date) {
         this.release_date = release_date;
+    }
+
+    public Boolean getRated() {
+        return isRated;
+    }
+
+    public void setRated(Boolean rated) {
+        isRated = rated;
     }
 
     // tostring gor debugging
